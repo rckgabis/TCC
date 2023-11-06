@@ -7,6 +7,7 @@ import { visualizarLinhas } from "../../../../../firebase-config";
 import Logo from "../../../components/logo/index";
 import styles from "./style";
 
+
 const VisualizarLinhas = () => {
   const [linhas, setLinhas] = useState([]);
   const [searchText, setSearchText] = useState('');
@@ -26,6 +27,9 @@ const VisualizarLinhas = () => {
   const filteredLinhas = linhas.filter(linha => {
     return linha.id.toString().includes(searchText) || linha.nome.toLowerCase().includes(searchText.toLowerCase());
   });
+
+  // Ordenar as linhas com base no ID em ordem crescente
+  filteredLinhas.sort((a, b) => a.id - b.id);
 
   return (
     <ImageBackground

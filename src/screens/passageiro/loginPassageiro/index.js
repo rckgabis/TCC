@@ -46,7 +46,7 @@ const LoginPassageiro = () => {
 
   return (
     <ImageBackground
-      source={require("../../../../assets/background1.png")}
+      source={require("../../../../assets/background5.png")}
       style={styles.background}
     >
       <View style={styles.container}>

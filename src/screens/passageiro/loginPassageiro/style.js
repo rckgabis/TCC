@@ -16,34 +16,23 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   buttonContainer: {
-    justifyContent: "center",
+    justifyContent: 'center',
     marginBottom: 30,
     paddingHorizontal: 20,
   },
   button: {
-    flexDirection: "row", // Alinhe os elementos horizontalmente
-    alignItems: "center", // Alinhe verticalmente ao centro
     borderWidth: 1,
-    borderColor: "#DFDFDF",
-    backgroundColor: "#7C5CCE",
+    borderColor: '#DFDFDF',
+    backgroundColor: '#7C5CCE',
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginBottom: 10,
   },
-  buttonContent: {
-    flexDirection: "row",
-    alignItems: "center", // Alinhe o texto "Entrar com o" verticalmente ao centro
-  },
   buttonText: {
-    fontFamily: "Roboto",
-    color: "#fff",
+    fontFamily: 'Roboto',
+    textAlign: 'center',
+    color: '#fff',
     fontSize: 14,
-  },
-  googleText: {
-    fontFamily: "Roboto",
-    color: "#fff",
-    fontSize: 14,
-    marginRight: 5, // Adicione margem à direita do texto "Google"
   },
   supportButton: {
     paddingVertical: 5,

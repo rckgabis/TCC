@@ -32,9 +32,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderColor: "transparent", // Define a cor da borda como transparente
     marginBottom: 2,
-    marginTop: 50, // Espaçamento superior
-    paddingVertical: 2, // Espaçamento vertical interno
-    paddingHorizontal: 8, // Espaçamento horizontal interno
+    marginTop: 25, // Espaçamento superior
+    paddingVertical: 8, // Espaçamento vertical interno
+    paddingHorizontal: 4, // Espaçamento horizontal interno
     color: "white", // Cor do texto
     fontSize: 16, // Tamanho da fonte
     textAlign: "left",
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
 
   buttonContainer: {
     // Button container styles
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
   },
   // Estilos para o botão "Avançar"
   button: {
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     borderColor: "#fff", // Cor da borda
     paddingVertical: 4,
     paddingHorizontal: 90,
-    marginTop: 30,
+    marginTop: 20,
   },
   buttonText: {
     fontSize: 16,

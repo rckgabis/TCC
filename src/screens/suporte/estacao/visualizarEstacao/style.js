@@ -74,6 +74,10 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginLeft: 10,
   },
+  notificationContainer: {
+    height: 30,
+    width: '80%',
+  }
 });
 
 export default styles;

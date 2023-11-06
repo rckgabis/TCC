@@ -14,6 +14,7 @@ import {
   getDocs,
   getFirestore,
   updateDoc,
+  setDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -109,13 +110,20 @@ const excluirLinha = async (idLinha) => {
 };
 
 // Função para cadastrar a estação no Firebase
-const cadastrarEstacao = async (nomeEstacao, idEstacao) => {
+const cadastrarEstacao = async (nomeEstacao, idEstacao, nomeLinha) => {
   try {
     // Aqui você realiza o cadastro da estação no Firestore do Firebase
     await addDoc(collection(db, "estacoes"), {
       nome: nomeEstacao,
       id: idEstacao,
+      nomeLinha: nomeLinha,
       // Outros dados relacionados à estação, se houver
+    });
+
+    // Agora, associar a estação à linha correspondente
+    // Adicionando a referência da estação à coleção de linhas
+    await setDoc(doc(db, "linhas", nomeLinha, "estacoes", nomeEstacao), {
+      // Outros dados relacionados à associação entre a estação e a linha, se necessário
     });
 
     // Se o cadastro for bem-sucedido, retorna verdadeiro
@@ -165,22 +173,32 @@ export {
 };
 
 // Função para visualizar as estações no Firebase
-export const visualizarEstacoes = async () => {
+const visualizarEstacoes = async () => {
   const estacoes = [];
 
   try {
-    const estacoesRef = collection(db, "estacoes");
+    const estacoesRef = collection(db, 'estacoes');
     const snapshot = await getDocs(estacoesRef);
 
     snapshot.forEach((doc) => {
-      estacoes.push({ id: doc.id, ...doc.data() });
+      const estacao = doc.data();
+      const id = doc.id; // Este é o ID do documento
+      const estacaoId = estacao.id; // Este é o campo 'id' dentro do documento
+
+      estacoes.push({
+        id: estacaoId,
+        nome: estacao.nome || 'Nome não encontrado',
+        nomeLinha: estacao.nomeLinha || 'Nome da linha não encontrado',
+        // Outros dados da estação, se houver
+      });
     });
   } catch (error) {
-    console.error("Erro ao obter as estações:", error);
+    console.error('Erro ao obter as estações:', error);
   }
 
   return estacoes;
 };
+
 
 const excluirEstacao = async (idEstacao) => {
   try {
@@ -266,5 +284,97 @@ const alterarSituacao = async (idSituacao, novoNomeSituacao) => {
     return false; // Ocorreu um erro ao alterar a situação
   }
 };
+
+const adicionarRelato = async (relato) => {
+  try {
+    // Adicionando um relato a uma coleção específica chamada "relatos"
+    const relatosCollection = collection(db, "relatos");
+
+    // Adicionando o documento do relato à coleção "relatos"
+    await addDoc(relatosCollection, relato);
+
+    console.log("Relato adicionado com sucesso!");
+    return true; // Retorna verdadeiro se a adição for bem-sucedida
+  } catch (error) {
+    console.error("Erro ao adicionar o relato:", error);
+    return false; // Retorna falso se ocorrer algum erro
+  }
+};
+
+const verificarRelatosSemelhantes = async (selectedOption1, selectedOption2, selectedOption3) => {
+  try {
+    const relatosRef = collection(db, "relatos");
+    const querySnapshot = await getDocs(relatosRef);
+
+    let count = 0;
+
+    querySnapshot.forEach((doc) => {
+      const relato = doc.data();
+      if (
+        relato.linha === selectedOption1 &&
+        relato.estacao === selectedOption2 &&
+        relato.situacao === selectedOption3
+      ) {
+        count++;
+      }
+    });
+
+    return count;
+  } catch (error) {
+    console.error("Erro ao verificar relatos semelhantes:", error);
+    return 0;
+  }
+};
+
+const adicionarNaColecaoAvisos = async (linha, estacao, situacao) => {
+  try {
+    // Obtém uma referência para a coleção "avisos"
+    const avisosRef = collection(db, "avisos");
+    
+    // Adiciona um documento na coleção "avisos" com um campo "relato" que é uma subcoleção
+    const docRef = await addDoc(avisosRef, {
+      relato: {
+        linha: linha,
+        estacao: estacao,
+        situacao: situacao
+      }
+    });
+
+    console.log("Adicionado na coleção 'avisos' com ID:", docRef.id);
+  } catch (error) {
+    console.error("Erro ao adicionar na coleção 'avisos':", error);
+  }
+};
+
+const visualizarAvisos = async () => {
+  const db = getFirestore(); // Obtém a instância do Firestore
+  const avisosData = [];
+
+  try {
+    const avisosRef = collection(db, 'avisos'); // Referência para a coleção 'avisos'
+    const avisosSnapshot = await getDocs(avisosRef); // Obtém os documentos da coleção 'avisos'
+
+    for (const avisoDoc of avisosSnapshot.docs) {
+      const relatoRef = collection(avisoDoc.ref, 'relato'); // Referência para a subcoleção 'relato' de cada aviso
+      const relatoSnapshot = await getDocs(relatoRef); // Obtém os documentos da subcoleção 'relato'
+
+      relatoSnapshot.forEach((doc) => {
+        avisosData.push({
+          estacao: doc.data().estacao,
+          linha: doc.data().linha,
+          situacao: doc.data().situacao
+        });
+      });
+    }
+
+    return avisosData;
+  } catch (error) {
+    console.error("Erro ao obter avisos:", error);
+    return []; // Retorna um array vazio em caso de erro
+  }
+};
+
+
+export { visualizarEstacoes, adicionarRelato, verificarRelatosSemelhantes, adicionarNaColecaoAvisos, visualizarAvisos };
 
 

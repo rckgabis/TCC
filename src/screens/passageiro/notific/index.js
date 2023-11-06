@@ -2,21 +2,24 @@
 import { EvilIcons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { ImageBackground, ScrollView, Text, View } from "react-native";
-import { visualizarNotificacoes } from "../../../../firebase-config";
+import { visualizarAvisos } from "../../../../firebase-config"; // Importando a função de visualizarAvisos do Firebase
 import Logo from "../../components/logo/index";
 import styles from "./style";
 
-// Definindo o componente de função HomePassageiro
+// Definindo o componente de função Notificacao
 const Notificacao = () => {
-  const [notificacoes, setNotificacoes] = useState([]);
+  const [avisos, setAvisos] = useState([]);
 
   useEffect(() => {
-    // Ao montar o componente, busca as notificações
-    const fetchData = async () => {
-      const notificacoesData = await visualizarNotificacoes();
-      setNotificacoes(notificacoesData);
+    const fetchAvisos = async () => {
+      try {
+        const avisosData = await visualizarAvisos();
+        setAvisos(avisosData);
+      } catch (error) {
+        console.error("Erro ao obter avisos:", error);
+      }
     };
-    fetchData();
+    fetchAvisos();
   }, []);
 
   return (
@@ -26,34 +29,25 @@ const Notificacao = () => {
     >
       <View style={styles.container}>
         <Logo />
-
         <View style={styles.iconContainer}>
-          <EvilIcons name="bell" size={32} color="white" />
-          <Text style={styles.description}>Visualizar Notificações</Text>
+          <EvilIcons name="bell" size={24} color="white" />
+          <Text style={styles.description}>Visualizar Avisos</Text>
         </View>
-
         <View style={styles.space} />
 
-        {/* Usando o ScrollView para as notificações */}
         <ScrollView style={styles.notificationContainer}>
-          {notificacoes.map((notificacao) => (
-            <View key={notificacao.id} style={styles.fieldContainer}>
-              <Text style={styles.selectText}>
-                {notificacao.titulo} - {notificacao.mensagem} -{" "}
-                {notificacao.data
-                  ? notificacao.data.toDate().toLocaleDateString()
-                  : "Data não disponível"}
+          {avisos.map((aviso, index) => (
+            <View key={index} style={styles.avisoContainer}>
+              <Text style={styles.avisoText}>
+                Estação: {aviso.estacao} - Linha: {aviso.linha} - Situação:{" "}
+                {aviso.situacao}
               </Text>
             </View>
           ))}
         </ScrollView>
-
-        {/* Conteúdo vazio, possivelmente para mais elementos */}
         <View style={styles.content}></View>
       </View>
     </ImageBackground>
   );
 };
-
-// Exportando o componente HomePassageiro para uso em outros lugares
 export default Notificacao;

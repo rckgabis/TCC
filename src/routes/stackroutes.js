@@ -19,6 +19,7 @@ import VisualizarSituacao from "../screens/suporte/situacao/visualizarSituacao";
 import ExcluirSituacao from "../screens/suporte/situacao/excluirSituacao";
 import AlterarSituacao from "../screens/suporte/situacao/alterarSituacao";
 import Desenvolvedoras from "../screens/passageiro/desenvolvedoras";
+import Feedback from "../screens/passageiro/home/feedback";
 
 const Stack = createStackNavigator();
 
@@ -35,6 +36,7 @@ function StackRoutes() {
       <Stack.Screen name="LoginPassageiro" component={LoginPassageiro} />
       <Stack.Screen name="HomeRelato" component={TabRoutes} />
       <Stack.Screen name="Desenvolvedoras" component={Desenvolvedoras} />
+      <Stack.Screen name="Feedback" component={Feedback} />
       
       
       <Stack.Screen name="LoginSuporte" component={LoginSuporte} />

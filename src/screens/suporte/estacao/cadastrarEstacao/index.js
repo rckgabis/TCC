@@ -1,4 +1,5 @@
 import { Entypo } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
   ImageBackground,
@@ -10,7 +11,6 @@ import {
 import { cadastrarEstacao } from "../../../../../firebase-config";
 import Logo from "../../../components/logo/index";
 import styles from "./style";
-import { useNavigation } from "@react-navigation/native";
 
 const CadastrarEstacao = () => {
   const { navigate } = useNavigation();
@@ -19,15 +19,23 @@ const CadastrarEstacao = () => {
     navigate("VisualizarEstacao");
   };
 
-  const [nomeLinha, setNomeLinha] = useState("");
+  const [nomeEstacao, setNomeEstacao] = useState("");
   const [idEstacao, setIdEstacao] = useState("");
+  const [nomeLinha, setNomeLinha] = useState("");
+
 
   const cadastrarEstacaoNoFirebase = async () => {
-    const cadastradoComSucesso = await cadastrarEstacao(nomeLinha, idEstacao);
+    const cadastradoComSucesso = await cadastrarEstacao(
+      nomeEstacao,
+      idEstacao,
+      nomeLinha
+
+    );
 
     if (cadastradoComSucesso) {
-      setNomeLinha("");
+      setNomeEstacao("");
       setIdEstacao("");
+      setNomeLinha("");
       alert("Estação cadastrada com sucesso!");
     } else {
       alert("Ocorreu um erro ao cadastrar a estação");
@@ -43,16 +51,16 @@ const CadastrarEstacao = () => {
         <Logo />
 
         <View style={styles.iconContainer}>
-        <Entypo name="location-pin" size={24} color="white" />
+          <Entypo name="location-pin" size={24} color="white" />
           <Text style={styles.description}>Cadastrar Estação</Text>
         </View>
 
         <TextInput
-          placeholder="Digite o nome da linha"
+          placeholder="Digite o nome da estação"
           placeholderTextColor="white"
           style={styles.input}
-          value={nomeLinha}
-          onChangeText={(text) => setNomeLinha(text)}
+          value={nomeEstacao}
+          onChangeText={(text) => setNomeEstacao(text)}
         />
 
         <View style={styles.whiteLine} />
@@ -67,8 +75,23 @@ const CadastrarEstacao = () => {
 
         <View style={styles.whiteLine} />
 
-        <TouchableOpacity style={styles.button} onPress={cadastrarEstacaoNoFirebase}>
-          <Text style={styles.buttonText}onPress={cadastrarEstacaoNoFirebase}>Cadastrar</Text>
+        <TextInput
+          placeholder="Digite o nome da linha"
+          placeholderTextColor="white"
+          style={styles.input}
+          value={nomeLinha}
+          onChangeText={(text) => setNomeLinha(text)}
+        />
+
+        <View style={styles.whiteLine} />
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={cadastrarEstacaoNoFirebase}
+        >
+          <Text style={styles.buttonText} onPress={cadastrarEstacaoNoFirebase}>
+            Cadastrar
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.button} onPress={goToVisualizarLinhas}>

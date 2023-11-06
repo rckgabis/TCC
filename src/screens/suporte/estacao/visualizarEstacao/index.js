@@ -1,6 +1,12 @@
 import { Entypo } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { ImageBackground, ScrollView, Text, View, TextInput } from "react-native";
+import {
+  ImageBackground,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { visualizarEstacoes } from "../../../../../firebase-config";
 
 import Logo from "../../../components/logo/index";
@@ -8,7 +14,7 @@ import styles from "./style";
 
 const VisualizarEstacoes = () => {
   const [estacoes, setEstacoes] = useState([]);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     const fetchEstacoes = async () => {
@@ -22,9 +28,15 @@ const VisualizarEstacoes = () => {
     fetchEstacoes();
   }, []);
 
-  const filteredEstacoes = estacoes.filter(estacao => {
-    return estacao.id.toString().includes(searchText) || estacao.nome.toLowerCase().includes(searchText.toLowerCase());
-  });
+  const filteredEstacoes = estacoes.filter((estacao) => {
+    return (
+      estacao.id.toString().includes(searchText) ||
+      estacao.nome.toLowerCase().includes(searchText.toLowerCase()) ||
+      estacao.nomeLinha.toLowerCase().includes(searchText.toLowerCase())
+    );
+  });  
+
+  const sortedEstacoes = filteredEstacoes.slice().sort((a, b) => a.id - b.id);
 
   return (
     <ImageBackground
@@ -45,17 +57,22 @@ const VisualizarEstacoes = () => {
             placeholder="Pesquisar por ID ou nome da estação"
             placeholderTextColor="white"
             value={searchText}
-            onChangeText={text => setSearchText(text)}
+            onChangeText={(text) => setSearchText(text)}
           />
-          <Entypo name="magnifying-glass" size={24} color="white" style={styles.searchIcon} />
+          <Entypo
+            name="magnifying-glass"
+            size={24}
+            color="white"
+            style={styles.searchIcon}
+          />
         </View>
 
         <View style={styles.space} />
 
         <ScrollView style={styles.notificationContainer}>
-          {filteredEstacoes.map((estacao) => (
+          {sortedEstacoes.map((estacao) => (
             <Text key={estacao.id} style={styles.situacaoText}>
-              ID: {String(estacao.id)} - Nome da Estação: {estacao.nome}
+              ID: {String(estacao.id)} - Estação: {estacao.nome} - Linha: {estacao.nomeLinha}
             </Text>
           ))}
         </ScrollView>
