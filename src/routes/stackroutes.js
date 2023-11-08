@@ -20,6 +20,9 @@ import ExcluirSituacao from "../screens/suporte/situacao/excluirSituacao";
 import AlterarSituacao from "../screens/suporte/situacao/alterarSituacao";
 import Desenvolvedoras from "../screens/passageiro/desenvolvedoras";
 import Feedback from "../screens/passageiro/home/feedback";
+import VisualizarRelatoPassageiro from "../screens/suporte/visualizarRelatos";
+import CadastroPassageiro from "../screens/passageiro/cadastroPassageiro";
+import EsqueceuSenha from "../screens/passageiro/esqueceuSenhaPassageiro";
 
 const Stack = createStackNavigator();
 
@@ -37,6 +40,8 @@ function StackRoutes() {
       <Stack.Screen name="HomeRelato" component={TabRoutes} />
       <Stack.Screen name="Desenvolvedoras" component={Desenvolvedoras} />
       <Stack.Screen name="Feedback" component={Feedback} />
+      <Stack.Screen name="CadastroPassageiro" component={CadastroPassageiro} />
+      <Stack.Screen name="EsqueceuSenha" component={EsqueceuSenha} />
       
       
       <Stack.Screen name="LoginSuporte" component={LoginSuporte} />
@@ -57,6 +62,8 @@ function StackRoutes() {
       <Stack.Screen name="VisualizarSituacao" component={VisualizarSituacao} />
       <Stack.Screen name="ExcluirSituacao" component={ExcluirSituacao} />
       <Stack.Screen name="AlterarSituacao" component={AlterarSituacao} />
+
+      <Stack.Screen name="VisualizarRelatoPassageiro" component={VisualizarRelatoPassageiro} />
 
       <Stack.Screen name ="DesenvolvedorasSuporte" component={DesenvolvedorasSuporte}/>
     </Stack.Navigator>

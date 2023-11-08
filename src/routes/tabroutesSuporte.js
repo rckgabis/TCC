@@ -4,6 +4,7 @@ import ConfiguracoesSuporte from "../screens/suporte/configuracoes";
 import HomeEstacao from "../screens/suporte/estacao";
 import HomeLinhas from "../screens/suporte/home";
 import HomeSituacao from "../screens/suporte/situacao";
+import VisualizarRelatoPassageiro from "../screens/suporte/visualizarRelatos";
 
 const Tab = createBottomTabNavigator();
 
@@ -67,12 +68,27 @@ function TabRoutesSuporte() {
         options={{
           tabBarIcon: ({ color, focused }) => {
             if (focused) {
-              <Ionicons name="alert-circle-outline" size={28} color={color} />;
+              <Ionicons name="alert-circle-outline" size={30} color={color} />;
             }
 
             return (
-              <Ionicons name="alert-circle-outline" size={28} color={color} />
+              <Ionicons name="alert-circle-outline" size={30} color={color} />
             );
+          },
+          tabBarLabel: () => null, // Remove o nome da aba
+        }}
+      />
+
+      <Tab.Screen
+        name="VisualizarRelatoPassageiro"
+        component={VisualizarRelatoPassageiro}
+        options={{
+          tabBarIcon: ({ color, focused }) => {
+            if (focused) {
+              <Ionicons name="warning-outline" size={28} color={color} />
+            }
+
+            return <Ionicons name="warning-outline" size={28} color={color} />;
           },
           tabBarLabel: () => null, // Remove o nome da aba
         }}
@@ -84,14 +100,15 @@ function TabRoutesSuporte() {
         options={{
           tabBarIcon: ({ color, focused }) => {
             if (focused) {
-              <EvilIcons name="gear" size={32} color={color} />;
+              <EvilIcons name="gear" size={34} color={color} />;
             }
 
-            return <EvilIcons name="gear" size={32} color={color} />;
+            return <EvilIcons name="gear" size={34} color={color} />;
           },
           tabBarLabel: () => null, // Remove o nome da aba
         }}
       />
+
     </Tab.Navigator>
   );
 }

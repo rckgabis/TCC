@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Entypo } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import * as Notifications from "expo-notifications";
@@ -75,8 +75,6 @@ const HomeRelato = () => {
         title: 'Aviso',
         body: `Linha: ${selectedOption1} - Estação: ${selectedOption2} - Situação: ${selectedOption3}`,
         ios: { _displayInForeground: true },
-        // Removendo a referência ao canal de notificação
-        // android: { channelId: 'notification-channel' },
       };
 
       await Notifications.presentNotificationAsync(localNotification);
@@ -111,17 +109,23 @@ const HomeRelato = () => {
         <Text style={styles.description}>Relatar Problema</Text>
       </View>
 
+
       <View style={styles.pair}>
+
+      <Ionicons name="ios-git-branch-outline" size={24} color="white" />
+
         <Picker
           selectedValue={selectedOption1}
           onValueChange={(itemValue) => setSelectedOption1(itemValue)}
           style={{ color: "white", marginBottom: 20 }}
         >
+          
           {linhas.map((linha, index) => (
             <Picker.Item key={index} label={linha.nome} value={linha.nome} />
           ))}
         </Picker>
-
+        
+        <Entypo name="location-pin" size={24} color="white" />
         <Picker
           selectedValue={selectedOption2}
           onValueChange={(itemValue) => setSelectedOption2(itemValue)}
@@ -135,7 +139,9 @@ const HomeRelato = () => {
             />
           ))}
         </Picker>
+        
 
+        <Ionicons name="alert-circle-outline" size={24} color="white" />
         <Picker
           selectedValue={selectedOption3}
           onValueChange={(itemValue) => setSelectedOption3(itemValue)}

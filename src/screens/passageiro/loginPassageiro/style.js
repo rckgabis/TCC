@@ -71,6 +71,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#757575',
   },
+  senhaButton: {
+    paddingVertical: 2,
+    paddingHorizontal: 20,
+    marginTop: -6,
+  },
+  senhaButtonText: {
+    color: "#757575",
+    fontFamily: "Roboto",
+    fontSize: 11,
+    textAlign: "left",
+    marginBottom: 10,
+  },
 });
 
 export default styles;

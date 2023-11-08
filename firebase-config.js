@@ -5,6 +5,7 @@ import {
   initializeAuth,
   signInWithEmailAndPassword,
   signOut,
+  createUserWithEmailAndPassword as firebaseCreateUserWithEmailAndPassword, sendPasswordResetEmail
 } from "firebase/auth";
 import {
   addDoc,
@@ -40,6 +41,36 @@ const db = getFirestore(app);
 
 export { auth, db, signInWithEmailAndPassword };
 
+export const createUserWithEmailAndPassword = async (email, password) => {
+  try {
+    const userCredential = await firebaseCreateUserWithEmailAndPassword(auth, email, password);
+    return userCredential.user;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const handleResetPassword = (email) => {
+  return new Promise((resolve, reject) => {
+    if (email) {
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          console.log("Email enviado. Verifique sua caixa de entrada para redefinir sua senha.");
+          resolve(); // Resolva a Promise em caso de sucesso
+        })
+        .catch((error) => {
+          console.error("Erro ao enviar email:", error);
+          reject(error); // Rejeite a Promise em caso de erro
+        });
+    } else {
+      const error = new Error("Por favor, insira um endereço de email válido.");
+      console.error(error);
+      reject(error);
+    }
+  });
+};
+
+export { handleResetPassword };
 
 export const signOutFirebase = async () => {
   try {

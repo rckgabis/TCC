@@ -8,7 +8,7 @@ import styles from "./style";
 
 // Definindo o componente de função Notificacao
 const Notificacao = () => {
-  const [avisos, setAvisos] = useState([]);
+  const [relatos, setRelatos] = useState([]);
 
   useEffect(() => {
     const fetchAvisos = async () => {
@@ -36,13 +36,10 @@ const Notificacao = () => {
         <View style={styles.space} />
 
         <ScrollView style={styles.notificationContainer}>
-          {avisos.map((aviso, index) => (
-            <View key={index} style={styles.avisoContainer}>
-              <Text style={styles.avisoText}>
-                Estação: {aviso.estacao} - Linha: {aviso.linha} - Situação:{" "}
-                {aviso.situacao}
-              </Text>
-            </View>
+          {sortedSituacoes.map((relato) => (
+            <Text key={situacao.id} style={styles.situacaoText}>
+              ID: {String(situacao.id)} - Situação: {situacao.nome}
+            </Text>
           ))}
         </ScrollView>
         <View style={styles.content}></View>
