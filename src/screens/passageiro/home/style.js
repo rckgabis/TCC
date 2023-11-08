@@ -45,6 +45,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#fff', // Cor do texto
   },
+
+  pickerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "white",
+    marginBottom: 20,
+  },
+  iconStyle: {
+    marginRight: 10,
+  },
+  pickerStyle: {
+    flex: 1,
+    color: "white",
+  },
 });
 
 export default styles;

@@ -30,18 +30,12 @@ const styles = StyleSheet.create({
   },
 
   space: {
-    height: 120, // Ajuste a altura do espaçamento conforme necessário
+    height: 60, // Ajuste a altura do espaçamento conforme necessário
   },
 
   fieldContainer: {
     flexDirection: "row",
     marginBottom: 4,
-  },
-  selectText: {
-    color: "white",
-    fontSize: 16,
-    marginRight: 5,
-    textAlign: "left",
   },
 
   whiteLine: {
@@ -50,6 +44,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     marginVertical: 10,
   },
+
+  notificationContainer: {
+    width: '60%',
+    marginBottom: 200,
+  },
+
+  notificacaoItem: {
+    color: "white",
+    fontSize: 16,
+  },
+
 });
 
 export default styles;

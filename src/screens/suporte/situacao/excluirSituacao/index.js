@@ -10,8 +10,8 @@ const ExcluirSituacao = () => {
   const { navigate } = useNavigation();
   const [idSituacao, setIdSituacao] = useState(""); // ID da situação a ser excluída
 
-  const goToVisualizarSituacoes = () => {
-    navigate("VisualizarSituacoes");
+  const goToVisualizarSituacao = () => {
+    navigate("VisualizarSituacao");
   };
 
   const excluirSituacaoNoFirebase = async () => {
@@ -53,8 +53,8 @@ const ExcluirSituacao = () => {
           <Text style={styles.buttonText}>Excluir</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={goToVisualizarSituacoes}>
-          <Text style={styles.buttonText}>Visualizar</Text>
+        <TouchableOpacity style={styles.button} onPress={goToVisualizarSituacao}>
+          <Text style={styles.buttonText} onPress={goToVisualizarSituacao}>Visualizar</Text>
         </TouchableOpacity>
 
         <View style={styles.content}></View>

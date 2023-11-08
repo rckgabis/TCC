@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Image, Animated, ImageBackground, Text, TextInput, TouchableOpacity, View, Alert, Keyboard } from 'react-native';
+import { Animated, ImageBackground, Text, TextInput, TouchableOpacity, View, Alert, Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { auth, signInWithEmailAndPassword } from '../../../../firebase-config.js';
 import styles from '../loginPassageiro/style';
@@ -30,6 +30,13 @@ const LoginPassageiro = () => {
   const handlePasswordFocus = () => {
     Animated.timing(passwordIconSize, {
       toValue: 150,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
+  
+    // Restaurar o tamanho do ícone de email para 200 quando o campo de senha for focado
+    Animated.timing(emailIconSize, {
+      toValue: 200,
       duration: 500,
       useNativeDriver: false,
     }).start();

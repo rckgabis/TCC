@@ -1,11 +1,11 @@
-import { Ionicons, Entypo } from "@expo/vector-icons";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import * as Notifications from "expo-notifications";
 import React, { useEffect, useState } from "react";
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import {
-  adicionarNaColecaoAvisos,
+  adicionarNaColecaoNotificacoes,
   adicionarRelato,
   verificarRelatosSemelhantes,
   visualizarEstacoes,
@@ -29,8 +29,8 @@ const HomeRelato = () => {
   useEffect(() => {
     const getNotificationPermission = async () => {
       const { status } = await Notifications.requestPermissionsAsync();
-      if (status !== 'granted') {
-        console.log('Permissões de notificação não concedidas!');
+      if (status !== "granted") {
+        console.log("Permissões de notificação não concedidas!");
       }
     };
 
@@ -52,13 +52,12 @@ const HomeRelato = () => {
           data: { data: "conteúdo" },
         };
 
-        const trigger = new Date().getTime() + 5000;
+        const trigger = new Date().getTime() + 1000;
 
         const result = await Notifications.scheduleNotificationAsync({
           content: notificationContent,
           trigger,
         });
-
       } catch (error) {
         console.error("Erro ao buscar informações do Firebase:", error);
       }
@@ -68,17 +67,11 @@ const HomeRelato = () => {
   }, [selectedOption1, selectedOption2, selectedOption3]);
 
   const handleSend = async () => {
-    const count = await verificarRelatosSemelhantes(selectedOption1, selectedOption2, selectedOption3);
-
-    if (count > 1) {
-      const localNotification = {
-        title: 'Aviso',
-        body: `Linha: ${selectedOption1} - Estação: ${selectedOption2} - Situação: ${selectedOption3}`,
-        ios: { _displayInForeground: true },
-      };
-
-      await Notifications.presentNotificationAsync(localNotification);
-    }
+    const count = await verificarRelatosSemelhantes(
+      selectedOption1,
+      selectedOption2,
+      selectedOption3
+    );
 
     const relato = {
       linha: selectedOption1,
@@ -86,50 +79,89 @@ const HomeRelato = () => {
       situacao: selectedOption3,
     };
 
+    if (count > 1) {
+      const handleNotification = () => {
+        Notifications.setNotificationHandler({
+          handleNotification: async () => ({
+            shouldShowAlert: true,
+            shouldPlaySound: true,
+            shouldSetBadge: false,
+          }),
+        });
+      };
+
+      handleNotification();
+
+      const notificationId = await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "Aviso",
+          body: `Linha: ${selectedOption1} - Estação: ${selectedOption2} - Situação: ${selectedOption3}`,
+          ios: { _displayInForeground: true },
+        },
+        trigger: null,
+      });
+
+      if (notificationId !== null) {
+        const notificacaoAdicionado = await adicionarNaColecaoNotificacoes({
+          linha: selectedOption1,
+          estacao: selectedOption2,
+          situacao: selectedOption3,
+        });
+
+        if (notificacaoAdicionado) {
+          navigate("Feedback");
+        } else {
+          console.error("Erro ao adicionar aviso na coleção notificação");
+        }
+      } else {
+        console.error("Erro ao enviar notificação");
+      }
+    }
+
     const relatoAdicionado = await adicionarRelato(relato);
 
     if (relatoAdicionado) {
       navigate("Feedback");
     } else {
-      console.error("Erro ao adicionar o relato no Firebase");
+      console.error("Erro ao adicionar o relato na coleção Relatos");
     }
   };
-
   return (
     <ImageBackground
-      source={require("../../../../assets/background1.png")}
-      style={styles.background}
-    >
-      <View style={styles.container}>
-        <Logo />
-      </View>
+    source={require("../../../../assets/background1.png")}
+    style={styles.background}
+  >
+    <View style={styles.container}>
+      <Logo />
+    </View>
 
-      <View style={styles.iconContainer}>
-        <Ionicons name="warning-outline" size={24} color="white" />
-        <Text style={styles.description}>Relatar Problema</Text>
-      </View>
+    <View style={styles.iconContainer}>
+      <Ionicons name="warning-outline" size={24} color="white" />
+      <Text style={styles.description}>Relatar Problema</Text>
+    </View>
 
-
-      <View style={styles.pair}>
-
-      <Ionicons name="ios-git-branch-outline" size={24} color="white" />
-
+    <View style={styles.pair}>
+      <View style={styles.pickerContainer}>
+        <Ionicons name="ios-git-branch-outline" size={24} color="white" style={styles.iconStyle} />
         <Picker
           selectedValue={selectedOption1}
           onValueChange={(itemValue) => setSelectedOption1(itemValue)}
-          style={{ color: "white", marginBottom: 20 }}
+          style={styles.pickerStyle}
+          dropdownIconColor="white"
         >
-          
           {linhas.map((linha, index) => (
             <Picker.Item key={index} label={linha.nome} value={linha.nome} />
           ))}
         </Picker>
-        
-        <Entypo name="location-pin" size={24} color="white" />
+      </View>
+
+      <View style={styles.pickerContainer}>
+        <Entypo name="location-pin" size={26} color="white" style={styles.iconStyle} />
         <Picker
           selectedValue={selectedOption2}
           onValueChange={(itemValue) => setSelectedOption2(itemValue)}
-          style={{ color: "white", marginBottom: 20 }}
+          style={styles.pickerStyle}
+          dropdownIconColor="white"
         >
           {estacoes.map((estacao, index) => (
             <Picker.Item
@@ -139,13 +171,15 @@ const HomeRelato = () => {
             />
           ))}
         </Picker>
-        
+      </View>
 
-        <Ionicons name="alert-circle-outline" size={24} color="white" />
+      <View style={styles.pickerContainer}>
+        <Ionicons name="alert-circle-outline" size={24} color="white" style={styles.iconStyle} />
         <Picker
           selectedValue={selectedOption3}
           onValueChange={(itemValue) => setSelectedOption3(itemValue)}
-          style={{ color: "white" }}
+          style={styles.pickerStyle}
+          dropdownIconColor="white"
         >
           {situacoes.map((situacao, index) => (
             <Picker.Item
@@ -155,14 +189,15 @@ const HomeRelato = () => {
             />
           ))}
         </Picker>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={handleSend}>
-            <Text style={styles.buttonText}>Enviar</Text>
-          </TouchableOpacity>
-        </View>
       </View>
-    </ImageBackground>
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={handleSend}>
+          <Text style={styles.buttonText}>Enviar</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  </ImageBackground>
   );
 };
 

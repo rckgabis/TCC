@@ -357,55 +357,59 @@ const verificarRelatosSemelhantes = async (selectedOption1, selectedOption2, sel
   }
 };
 
-const adicionarNaColecaoAvisos = async (linha, estacao, situacao) => {
+
+const adicionarNaColecaoNotificacoes = async (notificacao) => {
   try {
-    // Obtém uma referência para a coleção "avisos"
-    const avisosRef = collection(db, "avisos");
-    
-    // Adiciona um documento na coleção "avisos" com um campo "relato" que é uma subcoleção
-    const docRef = await addDoc(avisosRef, {
-      relato: {
-        linha: linha,
-        estacao: estacao,
-        situacao: situacao
-      }
+    const notificacaoRef = collection(db, "notificacao"); // Corrigido para 'notificacao' (coleção correta)
+
+    // Adiciona um documento na coleção 'notificacao' (corrigido para 'notificacao' para corresponder à coleção)
+    await addDoc(notificacaoRef, notificacao); // Usando 'addDoc' para adicionar um documento
+
+    // Se o documento for adicionado com sucesso, retorna true
+    return true;
+  } catch (error) {
+    console.error('Erro ao adicionar notificação na coleção Notificacoes:', error);
+    // Se ocorrer um erro, retorna false ou lança uma exceção, dependendo do tratamento desejado
+    return false;
+  }
+};
+
+const visualizarNotificacoes = async () => {
+  const notificacoes = [];
+
+  try {
+    const notificacaosRef = collection(db, "notificacao"); 
+    const snapshot = await getDocs(notificacaosRef); 
+    snapshot.forEach((doc) => {
+      const { linha, estacao, situacao } = doc.data(); 
+      notificacoes.push({ linha, estacao, situacao }); 
     });
-
-    console.log("Adicionado na coleção 'avisos' com ID:", docRef.id);
   } catch (error) {
-    console.error("Erro ao adicionar na coleção 'avisos':", error);
+    console.error("Erro ao obter as situações:", error);
   }
+
+  return notificacoes;
 };
 
-const visualizarAvisos = async () => {
-  const db = getFirestore(); // Obtém a instância do Firestore
-  const avisosData = [];
+const visualizarRelatoPassageiro = async () => {
+  const relato = [];
 
   try {
-    const avisosRef = collection(db, 'avisos'); // Referência para a coleção 'avisos'
-    const avisosSnapshot = await getDocs(avisosRef); // Obtém os documentos da coleção 'avisos'
-
-    for (const avisoDoc of avisosSnapshot.docs) {
-      const relatoRef = collection(avisoDoc.ref, 'relato'); // Referência para a subcoleção 'relato' de cada aviso
-      const relatoSnapshot = await getDocs(relatoRef); // Obtém os documentos da subcoleção 'relato'
-
-      relatoSnapshot.forEach((doc) => {
-        avisosData.push({
-          estacao: doc.data().estacao,
-          linha: doc.data().linha,
-          situacao: doc.data().situacao
-        });
-      });
-    }
-
-    return avisosData;
+    const relatoRef = collection(db, "relatos");
+    const snapshot = await getDocs(relatoRef);
+    snapshot.forEach((doc) => {
+      const { linha, estacao, situacao } = doc.data();
+      relato.push({ linha, estacao, situacao });
+    });
   } catch (error) {
-    console.error("Erro ao obter avisos:", error);
-    return []; // Retorna um array vazio em caso de erro
+    console.error("Erro ao obter os relatos:", error);
   }
+
+  return relato;
 };
 
 
-export { visualizarEstacoes, adicionarRelato, verificarRelatosSemelhantes, adicionarNaColecaoAvisos, visualizarAvisos };
+
+export { visualizarEstacoes, adicionarRelato, verificarRelatosSemelhantes, visualizarNotificacoes, adicionarNaColecaoNotificacoes, visualizarRelatoPassageiro };
 
 

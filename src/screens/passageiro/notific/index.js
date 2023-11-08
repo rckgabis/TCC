@@ -1,25 +1,20 @@
 // Importando as dependências necessárias do React e React Native
 import { EvilIcons } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ImageBackground, ScrollView, Text, View } from "react-native";
-import { visualizarAvisos } from "../../../../firebase-config"; // Importando a função de visualizarAvisos do Firebase
+import { visualizarNotificacoes } from "../../../../firebase-config";
 import Logo from "../../components/logo/index";
 import styles from "./style";
 
 // Definindo o componente de função Notificacao
 const Notificacao = () => {
-  const [relatos, setRelatos] = useState([]);
+  const [notificacoes, setNotificacoes] = React.useState([]);
 
-  useEffect(() => {
-    const fetchAvisos = async () => {
-      try {
-        const avisosData = await visualizarAvisos();
-        setAvisos(avisosData);
-      } catch (error) {
-        console.error("Erro ao obter avisos:", error);
-      }
-    };
-    fetchAvisos();
+  React.useEffect(() => {
+    // Quando o componente é montado, busca as notificações
+    visualizarNotificacoes().then((notificacao) => {
+      setNotificacoes(notificacao);
+    });
   }, []);
 
   return (
@@ -30,21 +25,29 @@ const Notificacao = () => {
       <View style={styles.container}>
         <Logo />
         <View style={styles.iconContainer}>
-          <EvilIcons name="bell" size={24} color="white" />
-          <Text style={styles.description}>Visualizar Avisos</Text>
+          <EvilIcons name="bell" size={32} color="white" />
+          <Text style={styles.description}>Visualizar Notificações</Text>
         </View>
+
         <View style={styles.space} />
 
+      
         <ScrollView style={styles.notificationContainer}>
-          {sortedSituacoes.map((relato) => (
-            <Text key={situacao.id} style={styles.situacaoText}>
-              ID: {String(situacao.id)} - Situação: {situacao.nome}
-            </Text>
+          {notificacoes.map((notificacao, index) => (
+            <View key={index} style={styles.notificacaoItem}>
+              <Text style={{ color: 'white', fontSize: 16, paddingVertical: 10, fontWeight: 'bold' }}>AVISO:</Text>
+              <Text style={{ color: 'white', fontSize: 16 }}>Linha: {notificacao.linha}</Text>
+              <Text style={{ color: 'white', fontSize: 16 }}>Estação: {notificacao.estacao}</Text>
+              <Text style={{ color: 'white', fontSize: 16 }}>Situação: {notificacao.situacao}</Text>
+              {/* Adicione estilos conforme necessário */}
+            </View>
           ))}
         </ScrollView>
+
         <View style={styles.content}></View>
       </View>
     </ImageBackground>
   );
 };
+
 export default Notificacao;

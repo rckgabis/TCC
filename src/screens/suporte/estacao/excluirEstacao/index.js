@@ -16,8 +16,8 @@ const ExcluirEstacoes = () => {
   const { navigate } = useNavigation();
   const [idEstacao, setIdEstacao] = useState(""); // ID da estação a ser excluída
 
-  const goToVisualizarEstacoes = () => {
-    navigate("VisualizarEstacoes");
+  const goToVisualizarEstacao = () => {
+    navigate("VisualizarEstacao");
   };
 
   const excluirEstacaoNoFirebase = async () => {
@@ -62,8 +62,8 @@ const ExcluirEstacoes = () => {
           <Text style={styles.buttonText}>Excluir</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={goToVisualizarEstacoes}>
-          <Text style={styles.buttonText}onPress={goToVisualizarEstacoes}>Visualizar</Text>
+        <TouchableOpacity style={styles.button} onPress={goToVisualizarEstacao}>
+          <Text style={styles.buttonText}onPress={goToVisualizarEstacao}>Visualizar</Text>
         </TouchableOpacity>
 
         <View style={styles.content}></View>

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
 import {
   Alert,
   Animated,
@@ -7,66 +8,54 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Keyboard,
-} from 'react-native';
+} from "react-native";
 import {
   auth,
   signInWithEmailAndPassword,
-} from '../../../../firebase-config.js';
-import styles from '../loginSuporte/style';
-import { useNavigation } from '@react-navigation/native';
+} from "../../../../firebase-config.js";
+import styles from "../loginSuporte/style";
 
 const LoginSuporte = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [iconSize] = useState(new Animated.Value(200));
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [iconSize] = useState(new Animated.Value(200)); // Defina o tamanho inicial do ícone
 
   const { navigate } = useNavigation();
 
   const handleFocus = () => {
+    // Animação para diminuir o tamanho do ícone quando o campo de entrada está focado
     Animated.timing(iconSize, {
-      toValue: 150,
-      duration: 200,
-      useNativeDriver: false,
+      toValue: 150, // Tamanho menor desejado
+      duration: 200, // Duração da animação em milissegundos
+      useNativeDriver: false, // Não use o driver nativo para animações de tamanho
     }).start();
   };
 
   const handleBlur = () => {
+    // Animação para voltar ao tamanho normal quando o campo de entrada perde o foco
     Animated.timing(iconSize, {
-      toValue: 200,
-      duration: 200,
+      toValue: 200, // Tamanho normal
+      duration: 200, // Duração da animação em milissegundos
       useNativeDriver: false,
+      // Não use o driver nativo para animações de tamanho
     }).start();
   };
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-      handleFocus();
-    });
-
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-      handleBlur();
-    });
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
 
   const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('Linhas');
+      navigate("Linhas");
     } catch (error) {
+      // Lide com os erros aqui, exibindo uma mensagem de erro usando Alert.alert
       console.error(error);
+
       Alert.alert(
-        'Erro',
-        'Falha no login. Verifique suas credenciais.',
+        "Erro",
+        "Falha no login. Verifique suas credenciais.",
         [
           {
-            text: 'OK',
-            onPress: () => console.log('OK Pressed'),
+            text: "OK",
+            onPress: () => console.log("OK Pressed"),
           },
         ],
         { cancelable: false }
@@ -76,12 +65,12 @@ const LoginSuporte = () => {
 
   return (
     <ImageBackground
-      source={require('../../../../assets/background2.png')}
+      source={require("../../../../assets/background2.png")}
       style={styles.background}
     >
       <View style={styles.container}>
         <Animated.Image
-          source={require('../../../../assets/logo1.png')}
+          source={require("../../../../assets/logo1.png")}
           style={[styles.logo, { width: iconSize, height: iconSize }]}
         />
       </View>
@@ -124,7 +113,7 @@ const LoginSuporte = () => {
           style={styles.supportButton}
           activeOpacity={0.2}
           onPress={() => {
-            navigate('LoginPassageiro');
+            navigate("LoginPassageiro");
           }}
         >
           <Text style={styles.supportButtonText}>

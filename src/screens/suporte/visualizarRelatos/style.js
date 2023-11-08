@@ -28,7 +28,33 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 
+  notificationContainer: {
+    padding: 10,
+    height: 100,
+    width: "80%",
+    marginTop: 20,
+  },
 
+  relatosText: {
+    padding: 10,
+    color: "white",
+    fontSize: 16,
+  },
+  searchBarContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  searchBar: {
+    color: "white",
+    fontSize: 16,
+    marginTop: 20,
+  },
+  searchIcon: {
+    marginTop: 20,
+    marginLeft: 8,
+  },
 });
 
 export default styles;

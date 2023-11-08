@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
 
   space: {
-    height: 100, // Ajuste a altura do espaçamento conforme necessário
+    height: 60, // Ajuste a altura do espaçamento conforme necessário
   },
 
   fieldContainer: {
