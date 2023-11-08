@@ -15,6 +15,8 @@ import {
 } from "../../../../firebase-config.js";
 import styles from "../loginSuporte/style";
 
+const adminEmail = "onrailstcc@gmail.com";
+
 const LoginSuporte = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,6 +45,23 @@ const LoginSuporte = () => {
 
   const handleLogin = async () => {
     try {
+      if (email.toLowerCase() !== adminEmail.toLowerCase()) {
+        // Verifica se o email não é o email de admin
+        Alert.alert(
+          "Erro",
+          "Apenas administradores podem fazer login.",
+          [
+            {
+              text: "OK",
+              onPress: () => console.log("OK Pressed"),
+            },
+          ],
+          { cancelable: false }
+        );
+        return; // Não realiza o login se não for o email do admin
+      }
+
+      // Realiza o login se for o email do admin
       await signInWithEmailAndPassword(auth, email, password);
       navigate("Linhas");
     } catch (error) {

@@ -1,9 +1,15 @@
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import * as Notifications from "expo-notifications";
 import React, { useEffect, useState } from "react";
-import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import {
+  BackHandler,
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import {
   adicionarNaColecaoNotificacoes,
   adicionarRelato,
@@ -25,6 +31,23 @@ const HomeRelato = () => {
   const [linhas, setLinhas] = useState([]);
   const [estacoes, setEstacoes] = useState([]);
   const [situacoes, setSituacoes] = useState([]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        return true; // Impede o comportamento padrão de voltar
+      };
+
+      const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        onBackPress
+      );
+
+      return () => {
+        backHandler.remove();
+      };
+    }, [])
+  );
 
   useEffect(() => {
     const getNotificationPermission = async () => {
@@ -128,76 +151,91 @@ const HomeRelato = () => {
   };
   return (
     <ImageBackground
-    source={require("../../../../assets/background1.png")}
-    style={styles.background}
-  >
-    <View style={styles.container}>
-      <Logo />
-    </View>
-
-    <View style={styles.iconContainer}>
-      <Ionicons name="warning-outline" size={24} color="white" />
-      <Text style={styles.description}>Relatar Problema</Text>
-    </View>
-
-    <View style={styles.pair}>
-      <View style={styles.pickerContainer}>
-        <Ionicons name="ios-git-branch-outline" size={24} color="white" style={styles.iconStyle} />
-        <Picker
-          selectedValue={selectedOption1}
-          onValueChange={(itemValue) => setSelectedOption1(itemValue)}
-          style={styles.pickerStyle}
-          dropdownIconColor="white"
-        >
-          {linhas.map((linha, index) => (
-            <Picker.Item key={index} label={linha.nome} value={linha.nome} />
-          ))}
-        </Picker>
+      source={require("../../../../assets/background1.png")}
+      style={styles.background}
+    >
+      <View style={styles.container}>
+        <Logo />
       </View>
 
-      <View style={styles.pickerContainer}>
-        <Entypo name="location-pin" size={26} color="white" style={styles.iconStyle} />
-        <Picker
-          selectedValue={selectedOption2}
-          onValueChange={(itemValue) => setSelectedOption2(itemValue)}
-          style={styles.pickerStyle}
-          dropdownIconColor="white"
-        >
-          {estacoes.map((estacao, index) => (
-            <Picker.Item
-              key={index}
-              label={estacao.nome}
-              value={estacao.nome}
-            />
-          ))}
-        </Picker>
+      <View style={styles.iconContainer}>
+        <Ionicons name="warning-outline" size={24} color="white" />
+        <Text style={styles.description}>Relatar Problema</Text>
       </View>
 
-      <View style={styles.pickerContainer}>
-        <Ionicons name="alert-circle-outline" size={24} color="white" style={styles.iconStyle} />
-        <Picker
-          selectedValue={selectedOption3}
-          onValueChange={(itemValue) => setSelectedOption3(itemValue)}
-          style={styles.pickerStyle}
-          dropdownIconColor="white"
-        >
-          {situacoes.map((situacao, index) => (
-            <Picker.Item
-              key={index}
-              label={situacao.nome}
-              value={situacao.nome}
-            />
-          ))}
-        </Picker>
-      </View>
+      <View style={styles.pair}>
+        <View style={styles.pickerContainer}>
+          <Ionicons
+            name="ios-git-branch-outline"
+            size={24}
+            color="white"
+            style={styles.iconStyle}
+          />
+          <Picker
+            selectedValue={selectedOption1}
+            onValueChange={(itemValue) => setSelectedOption1(itemValue)}
+            style={styles.pickerStyle}
+            dropdownIconColor="white"
+          >
+            {linhas.map((linha, index) => (
+              <Picker.Item key={index} label={linha.nome} value={linha.nome} />
+            ))}
+          </Picker>
+        </View>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleSend}>
-          <Text style={styles.buttonText}>Enviar</Text>
-        </TouchableOpacity>
+        <View style={styles.pickerContainer}>
+          <Entypo
+            name="location-pin"
+            size={26}
+            color="white"
+            style={styles.iconStyle}
+          />
+          <Picker
+            selectedValue={selectedOption2}
+            onValueChange={(itemValue) => setSelectedOption2(itemValue)}
+            style={styles.pickerStyle}
+            dropdownIconColor="white"
+          >
+            {estacoes.map((estacao, index) => (
+              <Picker.Item
+                key={index}
+                label={estacao.nome}
+                value={estacao.nome}
+              />
+            ))}
+          </Picker>
+        </View>
+
+        <View style={styles.pickerContainer}>
+          <Ionicons
+            name="alert-circle-outline"
+            size={24}
+            color="white"
+            style={styles.iconStyle}
+          />
+          <Picker
+            selectedValue={selectedOption3}
+            onValueChange={(itemValue) => setSelectedOption3(itemValue)}
+            style={styles.pickerStyle}
+            dropdownIconColor="white"
+          >
+            {situacoes.map((situacao, index) => (
+              <Picker.Item
+                key={index}
+                label={situacao.nome}
+                value={situacao.nome}
+              />
+            ))}
+          </Picker>
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={handleSend}>
+            <Text style={styles.buttonText}>Enviar</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
-  </ImageBackground>
+    </ImageBackground>
   );
 };
 
