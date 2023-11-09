@@ -75,7 +75,10 @@ const CadastrarSituacao = () => {
           <Text style={styles.buttonText}>Cadastrar</Text>
         </TouchableOpacity>
 
-        {/* Adicione o restante do seu componente aqui */}
+        <TouchableOpacity style={styles.button} onPress={goToVisualizarSituacoes}>
+          <Text style={styles.buttonText} onPress={goToVisualizarSituacoes}>Visualizar</Text>
+        </TouchableOpacity>
+        <View style={styles.content}></View>
 
       </View>
     </ImageBackground>

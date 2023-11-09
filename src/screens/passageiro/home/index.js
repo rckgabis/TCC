@@ -31,6 +31,7 @@ const HomeRelato = () => {
   const [linhas, setLinhas] = useState([]);
   const [estacoes, setEstacoes] = useState([]);
   const [situacoes, setSituacoes] = useState([]);
+  const [estacoesPorLinha, setEstacoesPorLinha] = useState([]); 
 
   useFocusEffect(
     React.useCallback(() => {
@@ -88,6 +89,16 @@ const HomeRelato = () => {
 
     fetchDataFromFirebase();
   }, [selectedOption1, selectedOption2, selectedOption3]);
+
+  useEffect(() => {
+    if (selectedOption1 !== "Linha") {
+      const estacoesFiltradas = estacoes.filter(
+        (estacao) => estacao.nomeLinha === selectedOption1
+      );
+      setEstacoesPorLinha(estacoesFiltradas);
+      setSelectedOption2(""); // Resetar a estação selecionada quando a linha muda
+    }
+  }, [selectedOption1, estacoes]);
 
   const handleSend = async () => {
     const count = await verificarRelatosSemelhantes(
@@ -164,47 +175,51 @@ const HomeRelato = () => {
       </View>
 
       <View style={styles.pair}>
-        <View style={styles.pickerContainer}>
-          <Ionicons
-            name="ios-git-branch-outline"
-            size={24}
-            color="white"
-            style={styles.iconStyle}
-          />
-          <Picker
-            selectedValue={selectedOption1}
-            onValueChange={(itemValue) => setSelectedOption1(itemValue)}
-            style={styles.pickerStyle}
-            dropdownIconColor="white"
-          >
-            {linhas.map((linha, index) => (
-              <Picker.Item key={index} label={linha.nome} value={linha.nome} />
-            ))}
-          </Picker>
-        </View>
+      <View style={styles.pickerContainer}>
+        <Ionicons
+          name="ios-git-branch-outline"
+          size={24}
+          color="white"
+          style={styles.iconStyle}
+        />
+        <Picker
+          selectedValue={selectedOption1}
+          onValueChange={(itemValue) => setSelectedOption1(itemValue)}
+          style={styles.pickerStyle}
+          dropdownIconColor="white"
+        >
+          {linhas.map((linha, index) => (
+            <Picker.Item key={index} label={linha.nome} value={linha.nome} />
+          ))}
+        </Picker>
+      </View>
 
-        <View style={styles.pickerContainer}>
-          <Entypo
-            name="location-pin"
-            size={26}
-            color="white"
-            style={styles.iconStyle}
-          />
-          <Picker
-            selectedValue={selectedOption2}
-            onValueChange={(itemValue) => setSelectedOption2(itemValue)}
-            style={styles.pickerStyle}
-            dropdownIconColor="white"
-          >
-            {estacoes.map((estacao, index) => (
-              <Picker.Item
-                key={index}
-                label={estacao.nome}
-                value={estacao.nome}
-              />
-            ))}
-          </Picker>
-        </View>
+      <View style={styles.pickerContainer}>
+  <Entypo
+    name="location-pin"
+    size={26}
+    color="white"
+    style={styles.iconStyle}
+  />
+  <Picker
+    selectedValue={selectedOption2}
+    onValueChange={(itemValue) => setSelectedOption2(itemValue)}
+    style={styles.pickerStyle}
+    dropdownIconColor="white"
+  >
+    {/* Item vazio como placeholder */}
+    <Picker.Item label="Estação" value="" />
+
+    {/* Opções das estações filtradas pela linha */}
+    {estacoesPorLinha.map((estacao, index) => (
+      <Picker.Item
+        key={index}
+        label={estacao.nome}
+        value={estacao.nome}
+      />
+    ))}
+  </Picker>
+</View>
 
         <View style={styles.pickerContainer}>
           <Ionicons
