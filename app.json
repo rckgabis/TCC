@@ -1,34 +1,32 @@
 {
   "expo": {
-    "name": "TCC_OnRails",
+    "name": "OnRails",
     "slug": "TCC_OnRails",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logoOnRails.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/carregando.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logoOnRails.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.gabisnotok.TCC_OnRails"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/logoOnRails.png"
     },
     "notification": {
-      "icon": "./assets/icon.png",
+      "icon": "./assets/logoOnRails.png",
       "color": "#000000",
       "androidMode": "default"
     },
