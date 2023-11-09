@@ -68,27 +68,13 @@ const HomeRelato = () => {
         setEstacoes([{ nome: "Estação" }, ...estacoesFromFirebase]);
         const situacoesFromFirebase = await visualizarSituacoes();
         setSituacoes([{ nome: "Situação" }, ...situacoesFromFirebase]);
-
-        // Agendamento da notificação após receber os dados do Firebase
-        const notificationContent = {
-          title: "AVISO",
-          body: `Linha: ${selectedOption1} - Estação: ${selectedOption2} - Situação: ${selectedOption3}`,
-          data: { data: "conteúdo" },
-        };
-
-        const trigger = new Date().getTime() + 1000;
-
-        const result = await Notifications.scheduleNotificationAsync({
-          content: notificationContent,
-          trigger,
-        });
       } catch (error) {
         console.error("Erro ao buscar informações do Firebase:", error);
       }
     };
 
     fetchDataFromFirebase();
-  }, [selectedOption1, selectedOption2, selectedOption3]);
+  }, []);
 
   useEffect(() => {
     if (selectedOption1 !== "Linha") {
@@ -96,7 +82,6 @@ const HomeRelato = () => {
         (estacao) => estacao.nomeLinha === selectedOption1
       );
       setEstacoesPorLinha(estacoesFiltradas);
-      setSelectedOption2(""); // Resetar a estação selecionada quando a linha muda
     }
   }, [selectedOption1, estacoes]);
 
@@ -112,6 +97,11 @@ const HomeRelato = () => {
       estacao: selectedOption2,
       situacao: selectedOption3,
     };
+
+    if (!selectedOption1 || !selectedOption2 || !selectedOption3) {
+      console.error("Por favor, selecione Linha, Estação e Situação antes de enviar.");
+      return;
+    }
 
     if (count > 1) {
       const handleNotification = () => {
